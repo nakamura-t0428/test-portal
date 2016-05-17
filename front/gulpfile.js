@@ -49,7 +49,25 @@ gulp.task('app_ts', ['tsd'], function () {
   return tsResult;
 });
 
-gulp.task('ts', ['app_ts']);
+// TypeScript Task
+gulp.task('app-common_ts', ['tsd'], function () {
+  // TypeScriptのコンパイル
+  var tsResult = gulp.src(['./src/commonts/*.ts'])
+  .pipe(sourcemaps.init())
+//  tscpnfig.jsonに書いたコンパイルオプションの取得
+  .pipe(ts(tsConfig.compilerOptions))
+  .pipe(concat('js/app-common.js'))
+  .pipe(uglify())
+  .pipe(sourcemaps.write('maps', {
+    includeContent: true
+  }))
+  .pipe(gulp.dest('./dist'));
+
+  // JSファイルをdistに移動
+  return tsResult;
+});
+
+gulp.task('ts', ['app_ts', 'app-common_ts']);
 
 gulp.task('html', function(){
   var result = gulp.src(['./src/**/*.html'])

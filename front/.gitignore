@@ -4,5 +4,6 @@ bower_components
 typings
 src/commons
 **/ts/*.js
+**/commonts/*.js
 *.log
 *.map
