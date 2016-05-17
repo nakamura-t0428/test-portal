@@ -1,0 +1,27 @@
+{
+  "version": "v4",
+  "repo": "DefinitelyTyped/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "jquery/jquery.d.ts": {
+      "commit": "b4bbee8f60560c34bc74b154b283f7ce83a31dae"
+    },
+    "angularjs/angular.d.ts": {
+      "commit": "b4bbee8f60560c34bc74b154b283f7ce83a31dae"
+    },
+    "angularjs/angular-mocks.d.ts": {
+      "commit": "b4bbee8f60560c34bc74b154b283f7ce83a31dae"
+    },
+    "angular-ui-router/angular-ui-router.d.ts": {
+      "commit": "b4bbee8f60560c34bc74b154b283f7ce83a31dae"
+    },
+    "angularjs/angular-resource.d.ts": {
+      "commit": "b4bbee8f60560c34bc74b154b283f7ce83a31dae"
+    },
+    "ngstorage/ngstorage.d.ts": {
+      "commit": "b4bbee8f60560c34bc74b154b283f7ce83a31dae"
+    }
+  }
+}
