@@ -4,7 +4,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "amd",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true
   },
@@ -12,6 +12,7 @@
     "./**/*.ts",
     "!./node_modules/**/*.ts"
   ],
+  "buildOnSave": false,
   "atom": {
     "rewriteTsconfig": false
   }

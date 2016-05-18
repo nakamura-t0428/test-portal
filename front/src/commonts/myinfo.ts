@@ -3,11 +3,11 @@
 module app.myinfo {
   export interface IMyInfoResp {
     success:boolean;
-    token:String;
-    email:String;
-    name:String;
-    msg:String;
-    errId:String;
+    token:string;
+    email:string;
+    name:string;
+    msg:string;
+    errId:string;
   }
   export function MyInfoFactory(appConfig:app.conf.AppConfig, myInfoData:ng.resource.IResourceClass<any>){
     return myInfoData.get(
@@ -21,7 +21,7 @@ module app.myinfo {
           window.location.href="/";
         }
       },
-      function(e) {
+      function(e:any) {
         console.log(e);
       }
     );
@@ -29,7 +29,7 @@ module app.myinfo {
 }
 
 angular.module('app.auth').factory('myInfoData', ['appConfig', '$resource',
-function(appConfig, $resource:ng.resource.IResourceService){
-  var data = $resource( appConfig.apiPref + '/myinfo' );
+function(appConfig:app.conf.AppConfig, $resource:ng.resource.IResourceService){
+  let data = $resource( appConfig.apiPref + '/myinfo' );
   return data;
 }]);

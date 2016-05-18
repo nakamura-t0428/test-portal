@@ -23,19 +23,19 @@ module app.auth{
     public request = (config:angular.IRequestConfig) => {
       if(config.url.indexOf(this.appConfig.apiPref)==0) {
         config.headers = config.headers || {};
-        console.log(this.$localStorage['authToken']);
-        if (this.$localStorage['authToken']) {
-          config.headers['Authorization'] = 'Bearer ' + this.$localStorage['authToken'];
+        console.log(this.$localStorage.get<string>('authToken'));
+        if (this.$localStorage.get<string>('authToken')) {
+          config.headers['Authorization'] = 'Bearer ' + this.$localStorage.get<string>('authToken');
         }
       }
       return config;
     }
     public response = (response:angular.IHttpPromiseCallbackArg<any>) => {
       if(response.config.url.indexOf(this.appConfig.apiPref)==0 && response.headers('Auth-Token')) {
-        this.$localStorage['authToken'] = response.headers('Auth-Token');
+        this.$localStorage.set<string>('authToken', response.headers('Auth-Token'));
         console.log('authToken updated.');
       } else if (response.status == 403 && response.data['errId'] == 'authorization_error') {
-        delete this.$localStorage['authToken'];
+        this.$localStorage.set<string>('authToken', undefined);
         console.log('authToken deleted by AuthError.');
         this.$window.location.href = '/';
       }
@@ -43,7 +43,7 @@ module app.auth{
     }
     public responseError = (response:angular.IHttpPromiseCallbackArg<any>) => {
       if (response.status === 401 || response.status === 403) {
-        delete this.$localStorage['authToken'];
+        this.$localStorage.set<string>('authToken', undefined);
         console.log('authToken deleted by ResponseError.');
         this.$window.location.href = '/';
       }
@@ -63,4 +63,4 @@ module app.auth{
 }
 
 angular.module('app.auth', ['ngStorage', 'app.conf']);
-angular.module('app.auth').factory('authFactory', ['$window', '$localStorage',($window, $localStorage) => {return new app.auth.AuthFactory($window, $localStorage);}]);
+angular.module('app.auth').factory('authFactory', ['$window', '$localStorage',($window:angular.IWindowService, $localStorage:angular.storage.IStorageService) => {return new app.auth.AuthFactory($window, $localStorage);}]);
