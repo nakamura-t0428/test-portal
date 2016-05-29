@@ -1,9 +1,10 @@
 {
-  "version": "1.5.0-alpha",
+  "version": "1.5.3",
   "sortOutput": true,
+  "compileOnSave": false,
   "compilerOptions": {
     "target": "es5",
-    "module": "amd",
+    "module": "commonjs",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true
@@ -15,5 +16,10 @@
   "buildOnSave": false,
   "atom": {
     "rewriteTsconfig": false
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "bower_components"
+  ]
+
 }

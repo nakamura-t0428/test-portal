@@ -26,10 +26,14 @@
     "del": "~2.2.0",
     "gulp-connect": "~3.2.0",
     "run-sequence": "~1.1.5",
-    "gulp-bower": "0.0.13"
+    "gulp-bower": "0.0.13",
+    "awesome-typescript-loader": "~0.17.0",
+    "bower-webpack-plugin": "~0.1.9"
   },
   "dependencies": {
     "ts-loader": "~0.8.2",
-    "typescript": "~1.8.10"
+    "typescript": "~1.8.10",
+    "webpack-stream": "~3.2.0",
+    "webpack": "~1.13.0"
   }
 }

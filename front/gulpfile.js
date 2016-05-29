@@ -18,6 +18,9 @@ var cssmin = require('gulp-cssmin');
 var del = require('del');
 var connect = require('gulp-connect');
 var runSequence = require('run-sequence');
+var webpackStream = require('webpack-stream');
+var webpack = require('webpack');
+var BowerWebpackPlugin = require("bower-webpack-plugin");
 
 gulp.task('bower', function() {
   return bower('./src/commons')
@@ -32,42 +35,41 @@ gulp.task('tsd', function (callback) {
 });
 
 // TypeScript Task
-gulp.task('app_ts', ['tsd'], function () {
-  // TypeScriptのコンパイル
-  var tsResult = gulp.src(['./src/ts/*.ts'])
-  .pipe(sourcemaps.init())
-//  tscpnfig.jsonに書いたコンパイルオプションの取得
-  .pipe(ts(tsConfig.compilerOptions))
-  .pipe(concat('js/app.js'))
-  .pipe(uglify())
-  .pipe(sourcemaps.write('maps', {
-    includeContent: true
-  }))
-  .pipe(gulp.dest('./dist'));
-
-  // JSファイルをdistに移動
-  return tsResult;
+gulp.task('ts_main', ['tsd'], function () {
+  return gulp.src(['./typings/**/*.ts','./src/ts/**/*.ts'])
+    .pipe(webpackStream({
+      displayErrorDetails: true,
+      devtool: 'source-map',
+      resolve: {
+        extensions: ['', '.ts', '.webpack.js', '.web.js', '.js']
+      },
+      entry: {main: './src/ts/main/app.ts'},
+      output: {
+        filename: 'js/main-app.js'
+      },
+      plugins: [
+        new BowerWebpackPlugin({
+          modulesDirectories: ["bower_components"],
+          manifestFiles:      "bower.json",
+          includes:           /.*/,
+          excludes:           [],
+          searchResolveModulesDirectories: true
+        }),
+        new webpack.optimize.UglifyJsPlugin()
+      ],
+      module: {
+        loaders: [
+          {
+            test: /\.ts$/,
+            loader: "awesome-typescript-loader"
+          }
+        ]
+      }
+    }))
+    .pipe(gulp.dest('dist/'));
 });
 
-// TypeScript Task
-gulp.task('app-common_ts', ['tsd'], function () {
-  // TypeScriptのコンパイル
-  var tsResult = gulp.src(['./src/commonts/*.ts'])
-  .pipe(sourcemaps.init())
-//  tscpnfig.jsonに書いたコンパイルオプションの取得
-  .pipe(ts(tsConfig.compilerOptions))
-  .pipe(concat('js/app-common.js'))
-  .pipe(uglify())
-  .pipe(sourcemaps.write('maps', {
-    includeContent: true
-  }))
-  .pipe(gulp.dest('./dist'));
-
-  // JSファイルをdistに移動
-  return tsResult;
-});
-
-gulp.task('ts', ['app_ts', 'app-common_ts']);
+gulp.task('ts', ['ts_main']);
 
 gulp.task('html', function(){
   var result = gulp.src(['./src/**/*.html'])
