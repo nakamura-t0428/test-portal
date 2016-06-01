@@ -36,7 +36,7 @@ gulp.task('tsd', function (callback) {
 
 // TypeScript Task
 gulp.task('ts_main', ['tsd'], function () {
-  return gulp.src(['./typings/**/*.ts','./src/ts/**/*.ts'])
+  return gulp.src(['./src/ts/**/*.ts'])
     .pipe(webpackStream({
       displayErrorDetails: true,
       devtool: 'source-map',
@@ -45,7 +45,7 @@ gulp.task('ts_main', ['tsd'], function () {
       },
       entry: {main: './src/ts/main/app.ts'},
       output: {
-        filename: 'js/main-app.js'
+        filename: 'js/[name]-app.js'
       },
       plugins: [
         new BowerWebpackPlugin({
@@ -62,6 +62,10 @@ gulp.task('ts_main', ['tsd'], function () {
           {
             test: /\.ts$/,
             loader: "awesome-typescript-loader"
+          },
+          {
+            test: /\.css$/,
+            loader: "style-loader!css-loader"
           }
         ]
       }
@@ -121,8 +125,7 @@ gulp.task('connect', function(){
 
 // Watch
 gulp.task('watch', function () {
-    gulp.watch(['./src/commonts/*.ts', './src/ts/*.ts'], ['landing_ts']);
-    // gulp.watch(['./src/commonts/*.ts', './src/my/ts/*.ts'], ['my_ts']);
+    gulp.watch(['./src/ts/**/*.ts'], ['ts']);
     gulp.watch(['./src/**/*.html'], ['html']);
     gulp.watch(['./src/**/*.{png,jpg,gif}', '!./src/commons/**/demo/**'], ['image']);
     gulp.watch(['./src/**/*.css', '!**/commons/**'], ['css']);

@@ -28,7 +28,9 @@
     "run-sequence": "~1.1.5",
     "gulp-bower": "0.0.13",
     "awesome-typescript-loader": "~0.17.0",
-    "bower-webpack-plugin": "~0.1.9"
+    "bower-webpack-plugin": "~0.1.9",
+    "style-loader": "~0.13.1",
+    "css-loader": "~0.23.1"
   },
   "dependencies": {
     "ts-loader": "~0.8.2",

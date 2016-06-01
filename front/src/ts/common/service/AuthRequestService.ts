@@ -1,6 +1,4 @@
-/// <reference path="../../../../typings/angularjs/angular.d.ts" />
-/// <reference path="../../../../typings/angularjs/angular-resource.d.ts" />
-/// <reference path="../../../../typings/ngstorage/ngstorage.d.ts"/>
+/// <reference path="../../../../typings/tsd.d.ts"/>
 
 import {ConfigService} from "../service/ConfigService";
 
