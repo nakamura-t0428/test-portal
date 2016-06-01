@@ -1,4 +1,5 @@
 export interface ISignUpData {
-  mail: string;
-  passwd: string;
+  token:string,
+  name:string,
+  passwd:string
 }
