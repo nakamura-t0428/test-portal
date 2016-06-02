@@ -1,4 +1,4 @@
-export class MsgCtrlBase {
+export class MsgControllerBase {
   message = '';
   sending = false;
 

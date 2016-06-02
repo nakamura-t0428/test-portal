@@ -2,12 +2,12 @@
 
 import IStateService = angular.ui.IStateService;
 import IStateParamsService = angular.ui.IStateParamsService;
-import {InviteDataResource} from '../resource/InviteDataResouce'
-import {MsgCtrlBase} from 'MsgCtrlBase';
+import {InviteDataResource} from '../resource/InviteDataResource'
+import {MsgControllerBase} from './MsgControllerBase';
 import {IInviteRespData} from '../model/IInviteRespData';
 import {IInviteData} from '../model/IInviteData';
 
-export class InviteCtrl extends MsgCtrlBase {
+export class InviteController extends MsgControllerBase {
   data: IInviteData = {
     email: ''
   };

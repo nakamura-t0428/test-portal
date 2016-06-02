@@ -5,9 +5,9 @@ import IStateParamsService = angular.ui.IStateParamsService;
 import {ISignUpData} from '../model/ISignUpData';
 import {ISignUpRespData} from '../model/ISignUpRespData';
 import {SignUpDataResource} from '../resource/SignUpDataResource';
-import {MsgCtrlBase} from 'MsgCtrlBase';
+import {MsgControllerBase} from 'MsgControllerBase';
 
-export class SignUpCtrl extends MsgCtrlBase {
+export class SignUpController extends MsgControllerBase {
   data: ISignUpData = {
     token: '',
     name: '',

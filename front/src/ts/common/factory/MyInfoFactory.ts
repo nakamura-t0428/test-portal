@@ -1,8 +1,9 @@
 import {AuthService} from "../service/AuthService";
-import {IMyInfoResp} from "../model/MyInfoResp";
+import {MyInfoResource} from '../resource/MyInfoResource';
+import {IMyInfoResp} from "../model/IMyInfoResp";
 
-export function MyInfoFactory(config:AuthService, myInfoData:ng.resource.IResourceClass<any>){
-  return myInfoData.get(
+export function MyInfoFactory(config:AuthService, myInfoResource:MyInfoResource){
+  return myInfoResource.get(
     function(resp:IMyInfoResp) {
       if(resp.success) {
         console.log(resp);
