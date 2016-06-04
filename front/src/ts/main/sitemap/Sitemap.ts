@@ -5,7 +5,7 @@ import IUrlRouterProvider= ng.ui.IUrlRouterProvider;
 import IHttpProvider = angular.IHttpProvider;
 import {MyInfoResource} from '../../common/resource/MyInfoResource';
 
-export class SitemapService {
+export class Sitemap {
   constructor(
     private $stateProvider:IStateProvider,
     private $urlRouterProvider:IUrlRouterProvider,
@@ -15,7 +15,7 @@ export class SitemapService {
     $stateProvider
     .state('guest', {
       url: '/guest',
-      templateUrl: 'views/guest/top.html',
+      templateUrl: 'guest/top.html',
     })
   }
 }

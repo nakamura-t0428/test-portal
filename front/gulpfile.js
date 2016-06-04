@@ -15,15 +15,20 @@ var copy = require('gulp-copy');
 var autoprefixer = require('gulp-autoprefixer');
 require('es6-promise').polyfill(); // for autoprefixer
 var cssmin = require('gulp-cssmin');
+var path = require("path");
 var del = require('del');
 var connect = require('gulp-connect');
 var runSequence = require('run-sequence');
 var webpackStream = require('webpack-stream');
 var webpack = require('webpack');
 var BowerWebpackPlugin = require("bower-webpack-plugin");
+var sass = require('gulp-sass');
+var templateCache = require('gulp-angular-templatecache');
 
 gulp.task('bower', function() {
-  return bower('./src/commons')
+  return bower({
+    command: 'install'
+  });
 });
 
 gulp.task('tsd', function (callback) {
@@ -35,13 +40,13 @@ gulp.task('tsd', function (callback) {
 });
 
 // TypeScript Task
-gulp.task('ts_main', ['tsd'], function () {
-  return gulp.src(['./src/ts/**/*.ts'])
+gulp.task('ts_main', ['tsd', 'bower'], function () {
+  return gulp.src(['./src/**/*'])
     .pipe(webpackStream({
       displayErrorDetails: true,
       devtool: 'source-map',
       resolve: {
-        extensions: ['', '.ts', '.webpack.js', '.web.js', '.js']
+        extensions: ['', '.ts', '.webpack.js', '.web.js', '.js', '.css']
       },
       entry: {main: './src/ts/main/app.ts'},
       output: {
@@ -50,10 +55,10 @@ gulp.task('ts_main', ['tsd'], function () {
       plugins: [
         new BowerWebpackPlugin({
           modulesDirectories: ["bower_components"],
-          manifestFiles:      "bower.json",
+          manifestFiles:      [".bower.json","bower.json"],
           includes:           /.*/,
           excludes:           [],
-          searchResolveModulesDirectories: true
+          searchResolveModulesDirectories: false
         }),
         new webpack.optimize.UglifyJsPlugin()
       ],
@@ -65,9 +70,16 @@ gulp.task('ts_main', ['tsd'], function () {
           },
           {
             test: /\.css$/,
-            loader: "style-loader!css-loader"
-          }
+            loaders: ['style', 'css']
+          },
+          { test: /\.svg$/, loader: 'url-loader?mimetype=image/svg+xml' },
+          { test: /\.woff$/, loader: 'url-loader?mimetype=application/font-woff' },
+          { test: /\.eot$/, loader: 'url-loader?mimetype=application/font-woff' },
+          { test: /\.ttf$/, loader: 'url-loader?mimetype=application/font-woff' }
         ]
+      },
+      sassLoader: {
+        includePaths: [path.resolve(__dirname, "./bower_components")]
       }
     }))
     .pipe(gulp.dest('dist/'));
@@ -75,18 +87,27 @@ gulp.task('ts_main', ['tsd'], function () {
 
 gulp.task('ts', ['ts_main']);
 
+gulp.task('main-template', function(){
+  return gulp.src('./src/views/**/*.html')
+    .pipe(templateCache('main-template.js', {
+      root: '',
+      module: 'main.app',
+      standalone: false,
+    }))
+    .pipe(gulp.dest('./dist/js'));
+});
+
 gulp.task('html', function(){
-  var result = gulp.src(['./src/**/*.html'])
-  .pipe(htmlmin({
-    removeComments: true,
-    removeCommentsFromCDATA: true,
-    removeCDATASectionsFromCDATA: true,
-    collapseWhitespace: true,
-    removeRedundantAttributes: true,
-    removeOptionalTags: true
-  }))
-  .pipe(gulp.dest('./dist'));
-  return result;
+  return gulp.src(['./src/index.html'])
+    .pipe(htmlmin({
+      removeComments: true,
+      removeCommentsFromCDATA: true,
+      removeCDATASectionsFromCDATA: true,
+      collapseWhitespace: true,
+      removeRedundantAttributes: true,
+      removeOptionalTags: true
+    }))
+    .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('image', function(){
@@ -96,20 +117,18 @@ gulp.task('image', function(){
   return result;
 });
 
-gulp.task('commons', ['bower'], function(){
-  var result = gulp.src(['./src/commons/**/*.{js,css}', './src/fonts/**', '!**/demo/**'], { base: 'src' })
-  .pipe(gulp.dest('./dist'));
-  return result;
-});
 
 gulp.task('css', function(){
-  var result = gulp.src(['./src/**/*.css', '!**/commons/**'])
-  .pipe(autoprefixer({
-    browsers: ['last 2 version', 'ie 8', 'ie 9']
-  }))
-  .pipe(cssmin())
-  .pipe(gulp.dest('./dist'));
-  return result;
+  return gulp.src('./src/**/*.scss')
+    .pipe(sass())
+    .on('error', function(err) {
+      console.log(err.message);
+    })
+    .pipe(autoprefixer({
+      browsers: ['last 2 version', 'ie 8', 'ie 9']
+    }))
+    .pipe(cssmin())
+    .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('clean', function(cb){
@@ -126,12 +145,13 @@ gulp.task('connect', function(){
 // Watch
 gulp.task('watch', function () {
     gulp.watch(['./src/ts/**/*.ts'], ['ts']);
-    gulp.watch(['./src/**/*.html'], ['html']);
-    gulp.watch(['./src/**/*.{png,jpg,gif}', '!./src/commons/**/demo/**'], ['image']);
-    gulp.watch(['./src/**/*.css', '!**/commons/**'], ['css']);
+    gulp.watch(['./src/index.html', './src/views/**/*.html'], ['html']);
+    gulp.watch(['./src/views/**/*.html'], ['main-template']);
+    gulp.watch(['./src/**/*.{png,jpg,gif}'], ['image']);
+    gulp.watch(['./src/**/*.css', './src/**/*.scss'], ['css']);
 });
 
-gulp.task('dist', ['bower', 'ts', 'html', 'image', 'commons', 'css']);
+gulp.task('dist', ['main-template','ts', 'css', 'image', 'html']);
 gulp.task('clean-for-release', function(cb){
   del(['./dist/maps'], cb);
 });

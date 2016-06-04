@@ -3,7 +3,7 @@
 import IStateService = angular.ui.IStateService;
 import IStateParamsService = angular.ui.IStateParamsService;
 import {InviteDataResource} from '../resource/InviteDataResource'
-import {MsgControllerBase} from './MsgControllerBase';
+import {MsgControllerBase} from '../../common/controller/MsgControllerBase';
 import {IInviteRespData} from '../model/IInviteRespData';
 import {IInviteData} from '../model/IInviteData';
 
@@ -26,14 +26,14 @@ export class InviteController extends MsgControllerBase {
     let newRes = new this.inviteDataResource(this.data);
     newRes.$save((resp:IInviteRespData, r:any)=>{
       if(resp.success) {
-        this.message = '招待メールを送信しました';
+        super.pushMessage('招待メールを送信しました');
         this.mailSent = true;
       } else {
-        this.message = resp.msg;
+        super.pushError(resp.msg);
       }
       super.finish();
     }, (e:any) => {
-      this.message = 'システムエラーが発生しました。しばらく時間をおいて再度お試しください。';
+      super.pushSysError();
       super.finish();
     });
   }

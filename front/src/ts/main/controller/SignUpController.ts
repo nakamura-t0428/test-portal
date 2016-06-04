@@ -5,7 +5,7 @@ import IStateParamsService = angular.ui.IStateParamsService;
 import {ISignUpData} from '../model/ISignUpData';
 import {ISignUpRespData} from '../model/ISignUpRespData';
 import {SignUpDataResource} from '../resource/SignUpDataResource';
-import {MsgControllerBase} from 'MsgControllerBase';
+import {MsgControllerBase} from '../../common/controller/MsgControllerBase';
 
 export class SignUpController extends MsgControllerBase {
   data: ISignUpData = {
@@ -28,14 +28,14 @@ export class SignUpController extends MsgControllerBase {
     let newRes = new this.signUpDataResource(this.data);
     newRes.$save((resp:ISignUpRespData, r:any) => {
       if(resp.success) {
-        this.message = '登録しました';
+        super.pushMessage('登録しました');
         this.$state.go('user.dashboard');
       } else {
-        this.message = resp.msg;
+        super.pushError(resp.msg);
       }
       super.finish();
     }, (e:any) => {
-      this.message = 'システムエラーが発生しました';
+      super.pushSysError();
       super.finish();
     });
   }
