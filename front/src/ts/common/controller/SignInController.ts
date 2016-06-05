@@ -5,10 +5,12 @@ import IStateParamsService = angular.ui.IStateParamsService;
 import {ISignInData} from '../model/ISignInData'
 import {ISignInRespData} from '../model/ISignInRespData';
 import {SignInDataResource} from '../resource/SignInDataResource'
-import {MsgControllerBase} from './MsgControllerBase';
+import {PostControllerBase} from './PostControllerBase';
 
 
-export class SignInController extends MsgControllerBase {
+export class SignInController
+  extends PostControllerBase<ISignInData, SignInDataResource, ISignInRespData> {
+    
   data: ISignInData = {
     email: '',
     passwd: ''
@@ -18,26 +20,12 @@ export class SignInController extends MsgControllerBase {
     private $state:IStateService,
     private signInDataResource: SignInDataResource
   ) {
-    super();
+    super(signInDataResource);
   }
   
-  submitSignIn():void {
-    super.begin();
-    
-    let resource = new this.signInDataResource(this.data);
-    resource.$save((resp:ISignInRespData, r:any) => {
-      if(resp.success) {
-        // 状態を更新
-        super.pushMessage('サインインしました');
-        this.$state.reload();
-      } else {
-        super.pushError(resp.msg);
-      }
-      super.finish();
-    }, (e:any) => {
-      super.pushSysError();
-      super.finish();
-    });
+  onSubmitSuccess(resp:ISignInRespData, r:any):void {
+    // 状態を更新
+    super.pushMessage('サインインしました');
+    this.$state.reload();
   }
-  
 }

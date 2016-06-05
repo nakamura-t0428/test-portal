@@ -9,6 +9,7 @@ import "angular-ui-router";
 import "angular-loading-bar";
 import IStateProvider = ng.ui.IStateProvider;
 import IStateService = angular.ui.IStateService;
+import IStateParamsService = angular.ui.IStateParamsService;
 import IUrlRouterProvider= ng.ui.IUrlRouterProvider;
 import IHttpProvider = angular.IHttpProvider;
 import IResourceService = ng.resource.IResourceService;
@@ -25,6 +26,9 @@ app.factory('config', [() => new ConfigService()]);
 import {SignInDataResourceFactory, SignInDataResource} from '../common/resource/SignInDataResource';
 app.factory('signInDataResource', ['config', '$resource', SignInDataResourceFactory]);
 
+import {SignUpDataResourceFactory, SignUpDataResource} from './resource/SignUpDataResource';
+app.factory('signUpDataResource', ['config', '$resource', SignUpDataResourceFactory]);
+
 import {MyInfoResourceFactory, MyInfoResource} from '../common/resource/MyInfoResource';
 app.factory('myInfoResource', ['config', '$resource', MyInfoResourceFactory]);
 
@@ -36,6 +40,11 @@ import {SignInController} from '../common/controller/SignInController';
 app.controller('signInController', ['$state', 'signInDataResource',
   ($state:IStateService, signInDataResource: SignInDataResource) =>
     new SignInController($state, signInDataResource)]);
+
+import {SignUpController} from './controller/SignUpController';
+app.controller('signUpController', ['$state', '$stateParams', 'signUpDataResource',
+  ($state:IStateService, $stateParams: IStateParamsService, signUpDataResource: SignUpDataResource) =>
+    new SignUpController($state, $stateParams, signUpDataResource)]);
 
 import {InviteController} from './controller/InviteController';
 app.controller('inviteController', ['$state', 'inviteDataResource',

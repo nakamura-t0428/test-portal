@@ -3,11 +3,12 @@
 import IStateService = angular.ui.IStateService;
 import IStateParamsService = angular.ui.IStateParamsService;
 import {InviteDataResource} from '../resource/InviteDataResource'
-import {MsgControllerBase} from '../../common/controller/MsgControllerBase';
+import {PostControllerBase} from '../../common/controller/PostControllerBase';
 import {IInviteRespData} from '../model/IInviteRespData';
 import {IInviteData} from '../model/IInviteData';
 
-export class InviteController extends MsgControllerBase {
+export class InviteController
+  extends PostControllerBase<IInviteData, InviteDataResource, IInviteRespData> {
   data: IInviteData = {
     email: ''
   };
@@ -17,24 +18,11 @@ export class InviteController extends MsgControllerBase {
     private $state:IStateService,
     private inviteDataResource: InviteDataResource
   ) {
-    super();
+    super(inviteDataResource);
   }
   
-  submitInvitatioin():void {
-    super.begin();
-    
-    let newRes = new this.inviteDataResource(this.data);
-    newRes.$save((resp:IInviteRespData, r:any)=>{
-      if(resp.success) {
-        super.pushMessage('招待メールを送信しました');
-        this.mailSent = true;
-      } else {
-        super.pushError(resp.msg);
-      }
-      super.finish();
-    }, (e:any) => {
-      super.pushSysError();
-      super.finish();
-    });
+  onSubmitSuccess(resp:IInviteRespData, r:any):void {
+    super.pushMessage('招待メールを送信しました');
+    this.mailSent = true;
   }
 }

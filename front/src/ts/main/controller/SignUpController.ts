@@ -5,38 +5,37 @@ import IStateParamsService = angular.ui.IStateParamsService;
 import {ISignUpData} from '../model/ISignUpData';
 import {ISignUpRespData} from '../model/ISignUpRespData';
 import {SignUpDataResource} from '../resource/SignUpDataResource';
-import {MsgControllerBase} from '../../common/controller/MsgControllerBase';
+import {PostControllerBase} from '../../common/controller/PostControllerBase';
 
-export class SignUpController extends MsgControllerBase {
+export class SignUpController
+  extends PostControllerBase<ISignUpData, SignUpDataResource, ISignUpRespData> {
+    
   data: ISignUpData = {
     token: '',
     name: '',
     passwd: ''
   };
+  passwdRe: string = '';
   
   constructor(
     private $state:IStateService,
     private $stateParams:IStateParamsService,
     private signUpDataResource:SignUpDataResource
   ) {
-    super();
+    super(signUpDataResource);
     this.data.token = $stateParams['token'];
   }
   
-  submitSignUp():void {
-    super.begin();
-    let newRes = new this.signUpDataResource(this.data);
-    newRes.$save((resp:ISignUpRespData, r:any) => {
-      if(resp.success) {
-        super.pushMessage('登録しました');
-        this.$state.go('user.dashboard');
-      } else {
-        super.pushError(resp.msg);
-      }
-      super.finish();
-    }, (e:any) => {
-      super.pushSysError();
-      super.finish();
-    });
+  onSubmitSuccess(resp:ISignUpRespData, r:any):void {
+    super.pushMessage('登録しました');
+    this.$state.go('user.dashboard');
+  }
+  
+  validate():boolean {
+    if(this.data.passwd != this.passwdRe) {
+      super.pushError('パスワードが一致しません');
+      return false;
+    }
+    return true;
   }
 }

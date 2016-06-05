@@ -11,11 +11,27 @@ export class Sitemap {
     private $urlRouterProvider:IUrlRouterProvider,
     private $httpProvider:IHttpProvider
   ) {
-    $urlRouterProvider.otherwise('/guest')
+    $urlRouterProvider.otherwise('/guest/top')
     $stateProvider
     .state('guest', {
+      abstract: true,
       url: '/guest',
+      templateUrl: 'guest/base.html',
+    })
+    $stateProvider
+    .state('guest.top', {
+      url: '/top',
       templateUrl: 'guest/top.html',
+    })
+    $stateProvider
+    .state('guest.invite', {
+      url: '/invite',
+      templateUrl: 'guest/invite.html',
+    })
+    $stateProvider
+    .state('guest.signup', {
+      url: '/signup/:token',
+      templateUrl: 'guest/signup.html',
     })
   }
 }
