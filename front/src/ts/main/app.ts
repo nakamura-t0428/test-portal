@@ -13,6 +13,7 @@ import IStateParamsService = angular.ui.IStateParamsService;
 import IUrlRouterProvider= ng.ui.IUrlRouterProvider;
 import IHttpProvider = angular.IHttpProvider;
 import IResourceService = ng.resource.IResourceService;
+import IStorageService = angular.storage.IStorageService;
 
 ////////////////////////////////////////////////// TypeScript
 
@@ -50,8 +51,23 @@ import {InviteController} from './controller/InviteController';
 app.controller('inviteController', ['$state', 'inviteDataResource',
   ($state:IStateService, inviteDataResource: InviteDataResource) =>
     new InviteController($state, inviteDataResource)]);
-    
+
+// import {GuestController} from './controller/GuestController';
+// import {IMyInfoResp} from '../common/model/IMyInfoResp';
+// app.controller('guestController', ['$state', 'myInfo', 'isLogin',
+//   ($state:IStateService, myInfo: IMyInfoResp, isLogin:boolean) =>
+//     new GuestController($state, myInfo, isLogin)]);
+
+////////////////////////////////////////////////////////// Config    
 import {Sitemap} from './sitemap/Sitemap';
 app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider',
   ($stateProvider:IStateProvider, $urlRouterProvider:IUrlRouterProvider, $httpProvider:IHttpProvider) =>
     new Sitemap($stateProvider, $urlRouterProvider, $httpProvider)]);
+
+import {AuthConfig} from '../common/config/AuthConfig';
+app.config(['$httpProvider', ($httpProvider:IHttpProvider) => new AuthConfig($httpProvider)]);
+
+// import {AuthService} from '../common/service/AuthService';
+// app.service('authService', ['$state', '$localStorage',
+//   ($state:IStateService, $localStorage:IStorageService) =>
+//     new AuthService($state, $localStorage)]);

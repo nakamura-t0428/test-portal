@@ -60,7 +60,7 @@ gulp.task('ts_main', ['tsd', 'bower'], function () {
           excludes:           [],
           searchResolveModulesDirectories: false
         }),
-        new webpack.optimize.UglifyJsPlugin()
+        // new webpack.optimize.UglifyJsPlugin()
       ],
       module: {
         loaders: [
