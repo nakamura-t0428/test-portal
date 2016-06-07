@@ -23,6 +23,7 @@ import com.nimbusds.jwt.JWTClaimsSet
 import com.loadtester.jwt.{UserAuthJWT, TmpAuthJWT}
 import com.loadtester.api.db.{DbServices => db}
 import com.loadtester.api.json.JsonSupport._
+import com.loadtester.api.json.UserJsonSupport._
 import com.loadtester.api.json.request.{Invitation, UserRegister}
 import com.loadtester.api.json.response.{FailureMessage, SuccessMessage, SysErrMessage, UserAuthResponse, AuthorizationError}
 import com.loadtester.api.service.TmpAuthLogic

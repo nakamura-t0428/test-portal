@@ -7,8 +7,17 @@ import spray.http._
 import spray.http.HttpHeaders.RawHeader
 import com.loadtester.api.util.CustomDirectives.{TokenHeader}
 import com.loadtester.api.util.UserAPIProps._
+import spray.util.LoggingContext
 
-class UserApiActor extends Actor with AuthRoute{
+class UserApiActor extends Actor with AuthRoute with ProjectRoute{
+  implicit override def exceptionHandler(implicit log:LoggingContext) = ExceptionHandler {
+    case e: Throwable =>
+      requestUri { uri =>
+        log.warning("Request to {} could not be handled normally: {} : {}", uri, e.getMessage)
+        e.printStackTrace
+        complete(StatusCodes.InternalServerError, "System Error")
+      }
+  }
   // the HttpService trait defines only one abstract member, which
   // connects the services environment to the enclosing actor or test
   def actorRefFactory = context
@@ -34,7 +43,7 @@ class UserApiActor extends Actor with AuthRoute{
         options {
           complete {StatusCodes.OK}
         } ~
-        authRoute
+        authRoute ~ projectRoute
       }
     )
 }

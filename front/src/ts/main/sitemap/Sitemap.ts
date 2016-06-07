@@ -56,7 +56,14 @@ export class Sitemap {
     $stateProvider
     .state('user.top', {
       url: '/top',
-      templateUrl: 'user/top.html',
+      views: {
+        'left-menu': {
+          templateUrl: 'user/left-menu.html',
+        },
+        'main-contents': {
+          templateUrl: 'user/top.html'
+        },
+      },
     })
   }
 }

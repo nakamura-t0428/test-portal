@@ -10,6 +10,7 @@ const GUEST_TOP_ST = 'guest.top';
 
 export class UserController {
   myInfo:IMyInfoResp;
+  
   constructor(
     private $state:IStateService,
     private $localStorage:IStorageService,

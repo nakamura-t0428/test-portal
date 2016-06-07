@@ -73,6 +73,7 @@ gulp.task('ts_main', ['tsd', 'bower'], function () {
             loaders: ['style', 'css']
           },
           { test: /\.svg$/, loader: 'url-loader?mimetype=image/svg+xml' },
+          { test: /\.woff2$/, loader: 'url-loader?mimetype=application/font-woff' },
           { test: /\.woff$/, loader: 'url-loader?mimetype=application/font-woff' },
           { test: /\.eot$/, loader: 'url-loader?mimetype=application/font-woff' },
           { test: /\.ttf$/, loader: 'url-loader?mimetype=application/font-woff' }

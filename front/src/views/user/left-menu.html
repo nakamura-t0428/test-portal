@@ -1,0 +1,14 @@
+<nav>
+  <ul class="nav">
+    <li ng-controller="projectController as prjCtrl">
+      <a class="dropdown-toggle" data-toggle="dropdown">
+        プロジェクト
+      </a>
+      <ul class="nav">
+        <li><a href><span class="glyphicon glyphicon-plus"></span> 新規プロジェクト</a></li>
+        <li ng-repeat="prj in prjCtrl.projects"><a href="#{{prj.id}}">{{prj.name | limitTo:16 }}</a></li>
+      </ul>
+    </li>
+  </nav>
+</nav>
+

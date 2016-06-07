@@ -16,8 +16,4 @@ object JsonSupport extends DefaultJsonProtocol{
   
   implicit val invitationFormatter = jsonFormat1(Invitation)
   implicit val resultMessageFormatter = jsonFormat3(ResultMessage)
-  implicit val userAuthFormatter = jsonFormat2(UserAuth)
-  implicit val userRegisterFormatter = jsonFormat3(UserRegister)
-  implicit val userAuthResponceFormatter = jsonFormat4(UserAuthResponse)
-  implicit val myInfoRespFormatter = jsonFormat3(MyInfoResp)
 }

@@ -20,6 +20,7 @@ import com.nimbusds.jwt.JWTClaimsSet
 import com.loadtester.jwt.{UserAuthJWT, TmpAuthJWT}
 import com.loadtester.api.db.{DbServices => db}
 import com.loadtester.api.json.JsonSupport._
+import com.loadtester.api.json.UserJsonSupport._
 import com.loadtester.api.json.request.{Invitation, UserRegister}
 import com.loadtester.api.json.response.{FailureMessage, SuccessMessage, SysErrMessage, UserAuthResponse, AuthorizationError}
 import com.loadtester.api.util.{CustomDirectives, UserAPIProps}
@@ -28,19 +29,15 @@ import com.loadtester.api.service.TmpAuthLogic.InvitaionExistsException
 import com.loadtester.data.dto.{UserReg, UserAuth}
 import com.loadtester.data.service.AlreadyExistError
 import com.loadtester.api.json.response.MyInfoResp
+import com.loadtester.api.json.response.ProjectInfoResponse
+import com.loadtester.api.json.ProjectJsonSupport._
 
 
 /**
  * 認証API定義
  */
 trait AuthRoute extends HttpService with LazyLogging {
-  implicit def exceptionHandler(implicit log:LoggingContext) = ExceptionHandler {
-    case e: Throwable =>
-      requestUri { uri =>
-        log.warning("Request to {} could not be handled normally: {}", uri, e)
-        complete(StatusCodes.InternalServerError, "System Error")
-      }
-  }
+  implicit def exceptionHandler(implicit log:LoggingContext):ExceptionHandler
   
   // you can use Actor's dispatcher as the execution context
   implicit val executionContext: ExecutionContext
@@ -128,6 +125,14 @@ trait AuthRoute extends HttpService with LazyLogging {
             }
           }
         }
+      } ~
+      path("test") {
+        get {
+          complete {
+            ProjectInfoResponse("1", "テストプロジェクト1")
+          }
+        }
+        
       }
     }
 }

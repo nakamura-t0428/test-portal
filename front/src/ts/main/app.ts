@@ -36,6 +36,9 @@ app.factory('myInfoResource', ['config', '$resource', MyInfoResourceFactory]);
 import {InviteDataResourceFactory, InviteDataResource} from './resource/InviteDataResource';
 app.factory('inviteDataResource', ['config', '$resource', InviteDataResourceFactory]);
 
+import {ProjectDataResourceFactory, ProjectDataResource} from './resource/ProjectDataResource';
+app.factory('projectDataResource', ['config', '$resource', ProjectDataResourceFactory]);
+
 //////////////////////////////////////////////////////// Controller
 import {SignInController} from '../common/controller/SignInController';
 app.controller('signInController', ['$state', 'signInDataResource',
@@ -51,6 +54,11 @@ import {InviteController} from './controller/InviteController';
 app.controller('inviteController', ['$state', 'inviteDataResource',
   ($state:IStateService, inviteDataResource: InviteDataResource) =>
     new InviteController($state, inviteDataResource)]);
+
+import {ProjectController} from './controller/ProjectController';
+app.controller('projectController', ['$state', 'projectDataResource',
+  ($state:IStateService, projectDataResource: ProjectDataResource) =>
+    new ProjectController(projectDataResource)]);
 
 // import {GuestController} from './controller/GuestController';
 // import {IMyInfoResp} from '../common/model/IMyInfoResp';

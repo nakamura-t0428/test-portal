@@ -37,13 +37,11 @@ body {
     text-align: center;
 }
 
-@media (max-width: 768px) {
-  .nav-to-site {
-      padding-top:0px;
-  }
+ul.nav > li > ul.nav > li > a {
+  font-size: small;
+  padding: 5px 5px 5px 30px;
 }
-@media (min-width: 768px) {
-	.nav-to-site {
-	    padding-top:25px;
-	}
+ul.nav > li > ul.nav > li > span {
+  font-size: small;
+  padding: 5px 5px 5px 30px;
 }
