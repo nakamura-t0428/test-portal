@@ -14,6 +14,8 @@ import IUrlRouterProvider= ng.ui.IUrlRouterProvider;
 import IHttpProvider = angular.IHttpProvider;
 import IResourceService = ng.resource.IResourceService;
 import IStorageService = angular.storage.IStorageService;
+import IModalService = ng.ui.bootstrap.IModalService;
+import IModalServiceInstance = ng.ui.bootstrap.IModalServiceInstance;
 
 ////////////////////////////////////////////////// TypeScript
 
@@ -56,9 +58,14 @@ app.controller('inviteController', ['$state', 'inviteDataResource',
     new InviteController($state, inviteDataResource)]);
 
 import {ProjectController} from './controller/ProjectController';
-app.controller('projectController', ['$state', 'projectDataResource',
-  ($state:IStateService, projectDataResource: ProjectDataResource) =>
-    new ProjectController(projectDataResource)]);
+app.controller('projectController', ['projectDataResource', '$uibModal',
+  (projectDataResource: ProjectDataResource, $uibModal: IModalService) =>
+    new ProjectController(projectDataResource, $uibModal)]);
+
+import {PrjEditDlgController} from './controller/PrjEditDlgController';
+app.controller('prjEditDlgController', ['$uibModalInstance',
+  ( $uibModalInstance: IModalServiceInstance) =>
+    new PrjEditDlgController($uibModalInstance)]);
 
 // import {GuestController} from './controller/GuestController';
 // import {IMyInfoResp} from '../common/model/IMyInfoResp';

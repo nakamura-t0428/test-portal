@@ -1,6 +1,6 @@
 package com.loadtester.data.dto
 
-case class UserInfoResp(
+case class MyInfo(
     userId:String,
     email:String,
     name:String

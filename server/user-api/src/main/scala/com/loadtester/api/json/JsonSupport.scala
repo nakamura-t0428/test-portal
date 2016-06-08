@@ -16,4 +16,5 @@ object JsonSupport extends DefaultJsonProtocol{
   
   implicit val invitationFormatter = jsonFormat1(Invitation)
   implicit val resultMessageFormatter = jsonFormat3(ResultMessage)
+  implicit val limitFormatter = jsonFormat2(Limit)
 }

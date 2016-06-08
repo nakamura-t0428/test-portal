@@ -10,7 +10,7 @@ import com.loadtester.data.dto.UserReg
 import scala.util.Failure
 import com.github.t3hnar.bcrypt._
 import scala.util.Success
-import com.loadtester.data.dto.UserInfoResp
+import com.loadtester.data.dto.MyInfo
 
 object AlreadyExistError extends Exception
   
@@ -43,7 +43,7 @@ class UserService(val dbm:ServiceDb) {
   
   def userInfo(userId:String) = {
     val q = dbm.userTbl.filter(u => u.userId === userId && !u.disabled).map(u => (u.userId, u.email, u.name))
-    val res = db.run(q.result.headOption.map(_.map(r => UserInfoResp.tupled(r))))
+    val res = db.run(q.result.headOption.map(_.map(r => MyInfo.tupled(r))))
     res
   }
 }

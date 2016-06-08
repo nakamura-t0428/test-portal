@@ -20,6 +20,9 @@ import spray.http.StatusCodes
 import spray.util.LoggingContext
 import com.loadtester.api.json.response.ProjectInfoResponse
 import com.loadtester.api.json.response.ProjectList
+import com.loadtester.api.json.response.ProjectList
+import com.loadtester.api.json.response.ProjectInfoResponse
+import com.loadtester.data.dto.Limit
 
 trait ProjectRoute extends HttpService with LazyLogging {
   implicit def exceptionHandler(implicit log:LoggingContext):ExceptionHandler
@@ -28,7 +31,7 @@ trait ProjectRoute extends HttpService with LazyLogging {
   val projectRoute = CustomDirectives.verifyToken { userId =>
     path("project") {
       post {
-        entity(as[ProjectRegister]) {prj => {
+        entity(as[ProjectRegister]) {prj => 
           onComplete(db.projectService.createProject(ProjectReg(prj.name, userId))) {
             case Success(p) => complete{
               ProjectInfoResponse(prjId = p.prjId, name = p.name)
@@ -38,15 +41,20 @@ trait ProjectRoute extends HttpService with LazyLogging {
               SysErrMessage()
             }
           }
-        }}
+        }
       } ~
       get {
-        val dummy = List[ProjectInfoResponse](
-            ProjectInfoResponse("1", "テストプロジェクト1"),
-            ProjectInfoResponse("2", "テストプロジェクト2"),
-            ProjectInfoResponse("3", "テストプロジェクト3"))
-        complete {
-          ProjectList(dummy)
+        parameters("limit".as[Int], "page".as[Int]) {(limit, page) => 
+          val dbRes = db.projectService.myProjects(userId, Limit(limit min 50 , page))
+          onComplete(dbRes) {
+            case Success(prjs) => complete{
+              ProjectList(prjs.map(p => ProjectInfoResponse(p.prjId, p.name)).toList)
+            }
+            case Failure(e) => complete{
+              logger.error("SystemError", e)
+              SysErrMessage()
+            }
+          }
         }
       }
     }

@@ -31,6 +31,7 @@ import com.loadtester.data.service.AlreadyExistError
 import com.loadtester.api.json.response.MyInfoResp
 import com.loadtester.api.json.response.ProjectInfoResponse
 import com.loadtester.api.json.ProjectJsonSupport._
+import com.loadtester.api.json.response.MyInfoResp
 
 
 /**

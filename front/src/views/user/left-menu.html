@@ -5,7 +5,7 @@
         プロジェクト
       </a>
       <ul class="nav">
-        <li><a href><span class="glyphicon glyphicon-plus"></span> 新規プロジェクト</a></li>
+        <li><a href ng-click="prjCtrl.showCreatePrjDlg();"><span class="glyphicon glyphicon-plus"></span> 新規プロジェクト</a></li>
         <li ng-repeat="prj in prjCtrl.projects"><a href="#{{prj.id}}">{{prj.name | limitTo:16 }}</a></li>
       </ul>
     </li>
