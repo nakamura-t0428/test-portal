@@ -11,5 +11,5 @@ object UserJsonSupport extends DefaultJsonProtocol  {
   implicit val userAuthFormatter = jsonFormat2(UserAuth)
   implicit val userRegisterFormatter = jsonFormat3(UserRegister)
   implicit val userAuthResponceFormatter = jsonFormat4(UserAuthResponse)
-  implicit val myInfoRespFormatter = jsonFormat3(MyInfoResp)
+  implicit val myInfoRespFormatter = jsonFormat4(MyInfoResp)
 }

@@ -9,5 +9,5 @@ import {ConfigService} from '../../common/service/ConfigService';
 export interface IProjectDataResource extends IProject,IResource<IProject> {}
 export type ProjectDataResource = IResourceClass<IProjectDataResource>
 export function ProjectDataResourceFactory(config:ConfigService, $resource:IResourceService) {
-  return $resource<IProjectDataResource>(config.apiPref + '/project');
+  return $resource<IProjectDataResource>(config.apiPref + '/project/:prjId', {prjId: '@prjId'});
 }

@@ -9,7 +9,9 @@ object ProjectJsonSupport extends DefaultJsonProtocol {
   import spray.json._
   
   implicit val projectRegisterFormatter = jsonFormat1(ProjectRegister)
-  implicit val projectRegisterResponseFormatter = jsonFormat2(ProjectInfoResponse.apply)
+  implicit val projectRegisterResponseFormatter = jsonFormat2(ProjectInfoResponse)
+  implicit val memberResponseFormatter = jsonFormat2(MemberInfoResp)
+  implicit val projectDetailFormatter = jsonFormat3(ProjectDetailResp)
   implicit object ProjectListFormatter extends RootJsonFormat[ProjectList] {
     def read(value: JsValue) = ProjectList(value.convertTo[List[ProjectInfoResponse]])
     def write(obj: ProjectList) = obj.datas.toJson

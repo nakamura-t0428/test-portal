@@ -65,5 +65,10 @@ export class Sitemap {
         },
       },
     })
+    $stateProvider
+    .state('user.top.project', {
+      url: '/project/:prjId',
+      templateUrl: 'user/project/projectDetail.html',
+    })
   }
 }

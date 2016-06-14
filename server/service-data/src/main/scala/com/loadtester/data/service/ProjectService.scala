@@ -13,6 +13,7 @@ import com.loadtester.data.dto.UserInfo
 import scala.concurrent.Future
 import com.loadtester.data.dto.Limit
 import com.loadtester.data.dto.DefaultLimit
+import com.loadtester.data.dto.MemberInfo
 
 class ProjectService(val dbm:ServiceDb) {
   import dbm.db
@@ -60,5 +61,27 @@ class ProjectService(val dbm:ServiceDb) {
         {ProjectInfo(prjId, prjName, UserInfo(ownerId, ownerName))}})
     
     db.run(res)
+  }
+  
+  def myProject(userId:String, prjId:String) = {
+    val qPrj = for{
+      prj <- dbm.projectTbl if prj.prjId === prjId
+      owner <- dbm.userTbl if owner.userId === prj.ownerId
+    } yield (prj.prjId, prj.prjName, owner.userId, owner.name, prj.regDate)
+    val qMem = for{
+      prjUser <- dbm.PrjUserTbl if prjUser.prjId === prjId
+      member <- dbm.userTbl if member.userId === prjUser.userId
+    } yield (member.userId, member.name)
+    
+    val resPrj = qPrj.result.map(_.map{case (prjId, prjName, ownerId, ownerName, regDate) =>
+      ProjectInfo(prjId, prjName, UserInfo(ownerId, ownerName))}.head)
+    val resMem = qMem.result.map(_.map{case (userId, userName) => MemberInfo(userId, userName)})
+    
+    db.run(resPrj).zip(db.run(resMem)).filter{case (p, mems) => {p.owner.userId == userId || mems.exists(_.userId == userId)}}
+  }
+  
+  def deleteProject(userId:String, prjId:String) = {
+    val qPrj = dbm.projectTbl.filter(prj => prj.prjId === prjId && prj.ownerId === userId)    
+    db.run(qPrj.delete.map(_ <= 0))
   }
 }

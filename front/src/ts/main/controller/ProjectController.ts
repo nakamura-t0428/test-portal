@@ -1,47 +1,57 @@
 /// <reference path="../../../../typings/tsd.d.ts"/>
 
+import IStateService = angular.ui.IStateService;
+import IStateParamsService = angular.ui.IStateParamsService;
 import IModalService = angular.ui.bootstrap.IModalService;
-import {IProject, INewProject} from '../model/IProjectData';
+import IScope = angular.IScope
+import {IProjectDetail} from '../model/IProjectData';
 import {ProjectDataResource} from '../resource/ProjectDataResource';
-import {ILimit} from '../../common/model/ILimit';
+import {IBaseRespData} from '../../common/model/IBaseRespData';
+import {UserController} from './UserController';
 
-const LIMIT_IN_MENU:ILimit = {
-  limit: 10,
-  page: 0
+export interface ProjectControllerScope extends IScope {
+  userCtrl: UserController
 }
+
 export class ProjectController {
-  projects:IProject[];
+  public project:IProjectDetail;
   
   constructor(
     private projectResource:ProjectDataResource,
-    private $uibModal:IModalService) {
-      projectResource.query(LIMIT_IN_MENU, (resp:IProject[])=>{
-        this.projects = resp;
+    private $state:IStateService,
+    private $stateParams:IStateParamsService,
+    private $uibModal:IModalService,
+    private $scope:ProjectControllerScope) {
+      projectResource.get({'prjId':$stateParams['prjId']}, (resp:IProjectDetail)=>{
+        this.project = resp;
       })
   }
 
-  createProject(prjName:String) {
-    let resource = new this.projectResource({'name' : prjName});
-    resource.$save((resp:IProject,r:any) => {
-      if(resp.prjId) {
-        this.projects.push(resp);
-      } else {
-        console.log(`Failed to create project: ${prjName}`);
+  isDeletable() {
+    return this.project && this.project.owner.userId == this.$scope.userCtrl.myInfo.userId;
+  }
+
+  showDeletePrjDlg() {
+    if(!this.isDeletable()) return;
+    let modal = this.$uibModal.open({
+      templateUrl: 'user/project/projectDelete.html',
+      controller: 'prjDeleteDlgController',
+      controllerAs: 'modalCtrl',
+      size: 'small',
+      resolve: {
+        project: () => {
+          return this.project;
+        }
       }
-    }, (e:any) =>{
-      console.log('System error');
+    });
+    modal.result.then(() => {
+      this.deleteProject();
     });
   }
 
-  showCreatePrjDlg() {
-    let modal = this.$uibModal.open({
-      templateUrl: 'user/projectEdit.html',
-      controller: 'prjEditDlgController',
-      controllerAs: 'modalCtrl',
-      size: 'small',
+  deleteProject() {
+    this.projectResource.delete({'prjId':this.project.prjInfo.prjId}, (resp:IBaseRespData)=>{
+      this.$state.go('user.top', {}, {reload: true});
     });
-    modal.result.then((data:INewProject) => {
-      this.createProject(data.name);
-    })
   }
 }

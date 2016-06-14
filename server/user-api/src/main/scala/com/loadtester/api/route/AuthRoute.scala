@@ -115,7 +115,7 @@ trait AuthRoute extends HttpService with LazyLogging {
         get {
           onComplete(db.userService.userInfo(userId)) {
             case Success(Some(u)) => {
-              complete(MyInfoResp(true, u.email, u.name))
+              complete(MyInfoResp(true, u.userId, u.email, u.name))
             }
             case Success(_) => {
               complete(FailureMessage("User not found","not_found"))

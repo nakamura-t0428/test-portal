@@ -57,15 +57,26 @@ app.controller('inviteController', ['$state', 'inviteDataResource',
   ($state:IStateService, inviteDataResource: InviteDataResource) =>
     new InviteController($state, inviteDataResource)]);
 
-import {ProjectController} from './controller/ProjectController';
-app.controller('projectController', ['projectDataResource', '$uibModal',
+import {ProjectListController} from './controller/ProjectListController';
+app.controller('projectListController', ['projectDataResource', '$uibModal',
   (projectDataResource: ProjectDataResource, $uibModal: IModalService) =>
-    new ProjectController(projectDataResource, $uibModal)]);
+    new ProjectListController(projectDataResource, $uibModal)]);
 
 import {PrjEditDlgController} from './controller/PrjEditDlgController';
 app.controller('prjEditDlgController', ['$uibModalInstance',
   ( $uibModalInstance: IModalServiceInstance) =>
     new PrjEditDlgController($uibModalInstance)]);
+
+import {IProjectDetail} from './model/IProjectData';
+import {PrjDeleteDlgController} from './controller/PrjDeleteDlgController';
+app.controller('prjDeleteDlgController', ['$uibModalInstance', 'project',
+  ( $uibModalInstance: IModalServiceInstance, project:IProjectDetail) =>
+    new PrjDeleteDlgController($uibModalInstance, project)]);
+
+import {ProjectController, ProjectControllerScope} from './controller/ProjectController';
+app.controller('projectController', ['projectDataResource', '$state', '$stateParams', '$uibModal', '$scope',
+  (projectResource: ProjectDataResource, $state:IStateService, $stateParams: IStateParamsService, $uibModal: IModalService, $scope: ProjectControllerScope) =>
+    new ProjectController(projectResource, $state, $stateParams, $uibModal, $scope)]);
 
 // import {GuestController} from './controller/GuestController';
 // import {IMyInfoResp} from '../common/model/IMyInfoResp';

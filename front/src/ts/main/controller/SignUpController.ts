@@ -28,7 +28,7 @@ export class SignUpController
   
   onSubmitSuccess(resp:ISignUpRespData, r:any):void {
     super.pushMessage('登録しました');
-    this.$state.go('user.dashboard');
+    this.$state.go('user.top');
   }
   
   validate():boolean {

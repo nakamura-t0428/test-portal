@@ -9,7 +9,7 @@ import {IMyInfoResp} from '../../common/model/IMyInfoResp';
 const GUEST_TOP_ST = 'guest.top';
 
 export class UserController {
-  myInfo:IMyInfoResp;
+  public myInfo:IMyInfoResp;
   
   constructor(
     private $state:IStateService,

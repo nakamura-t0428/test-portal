@@ -47,7 +47,7 @@ gulp.task('ts_main', ['tsd', 'bower'], function () {
       devtool: 'source-map',
       resolve: {
         extensions: ['', '.ts', '.webpack.js', '.web.js', '.js', '.css']
-      },
+       },
       entry: {main: './src/ts/main/app.ts'},
       output: {
         filename: 'js/[name]-app.js'
@@ -72,11 +72,6 @@ gulp.task('ts_main', ['tsd', 'bower'], function () {
             test: /\.css$/,
             loaders: ['style', 'css']
           },
-          { test: /\.svg$/, loader: 'url-loader?mimetype=image/svg+xml' },
-          { test: /\.woff2$/, loader: 'url-loader?mimetype=application/font-woff' },
-          { test: /\.woff$/, loader: 'url-loader?mimetype=application/font-woff' },
-          { test: /\.eot$/, loader: 'url-loader?mimetype=application/font-woff' },
-          { test: /\.ttf$/, loader: 'url-loader?mimetype=application/font-woff' }
         ]
       },
       sassLoader: {
@@ -132,6 +127,13 @@ gulp.task('css', function(){
     .pipe(gulp.dest('./dist'));
 });
 
+gulp.task('font', ['bower'], function(){
+  return gulp.src(
+    ['./bower_components/bootstrap-sass/assets/fonts/bootstrap/*.{eot,woff2,woff,ttf,svg}'],
+    { base: './bower_components/bootstrap-sass/assets/fonts/bootstrap/' }
+    ).pipe(gulp.dest('./dist/fonts'));
+});
+
 gulp.task('clean', function(cb){
   del(['./dist'], cb);
 });
@@ -152,7 +154,7 @@ gulp.task('watch', function () {
     gulp.watch(['./src/**/*.css', './src/**/*.scss'], ['css']);
 });
 
-gulp.task('dist', ['main-template','ts', 'css', 'image', 'html']);
+gulp.task('dist', ['main-template','ts', 'css', 'image', 'html', 'font']);
 gulp.task('clean-for-release', function(cb){
   del(['./dist/maps'], cb);
 });
