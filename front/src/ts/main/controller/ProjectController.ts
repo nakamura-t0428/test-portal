@@ -28,7 +28,7 @@ export class ProjectController {
   }
 
   isDeletable() {
-    return this.project && this.project.owner.userId == this.$scope.userCtrl.myInfo.userId;
+    return this.project && this.$scope.userCtrl.myInfo && this.project.owner.userId == this.$scope.userCtrl.myInfo.userId;
   }
 
   showDeletePrjDlg() {

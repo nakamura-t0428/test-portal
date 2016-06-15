@@ -38,7 +38,9 @@
     "html-loader": "~0.4.3",
     "gulp-sass": "~2.3.1",
     "gulp-cssnext": "~1.0.1",
-    "gulp-angular-templatecache": "~1.8.0"
+    "gulp-angular-templatecache": "~1.8.0",
+    "ignore-loader": "~0.1.1",
+    "gulp-flatten": "~0.2.0"
   },
   "dependencies": {
     "ts-loader": "~0.8.2",

@@ -24,6 +24,7 @@ var webpack = require('webpack');
 var BowerWebpackPlugin = require("bower-webpack-plugin");
 var sass = require('gulp-sass');
 var templateCache = require('gulp-angular-templatecache');
+var flatten = require('gulp-flatten');
 
 gulp.task('bower', function() {
   return bower({
@@ -74,9 +75,6 @@ gulp.task('ts_main', ['tsd', 'bower'], function () {
           },
         ]
       },
-      sassLoader: {
-        includePaths: [path.resolve(__dirname, "./bower_components")]
-      }
     }))
     .pipe(gulp.dest('dist/'));
 });
@@ -113,6 +111,13 @@ gulp.task('image', function(){
   return result;
 });
 
+gulp.task('js', function(){
+  return gulp.src(
+    ['./bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js',
+    './bower_components/jquery/dist/jquery.min.js'])
+    .pipe(flatten())
+    .pipe(gulp.dest('./dist/js'));
+});
 
 gulp.task('css', function(){
   return gulp.src('./src/**/*.scss')
@@ -129,9 +134,9 @@ gulp.task('css', function(){
 
 gulp.task('font', ['bower'], function(){
   return gulp.src(
-    ['./bower_components/bootstrap-sass/assets/fonts/bootstrap/*.{eot,woff2,woff,ttf,svg}'],
-    { base: './bower_components/bootstrap-sass/assets/fonts/bootstrap/' }
-    ).pipe(gulp.dest('./dist/fonts'));
+    ['./bower_components/bootstrap-sass/assets/fonts/bootstrap/*.{eot,woff2,woff,ttf,svg}'])
+    .pipe(flatten())
+    .pipe(gulp.dest('./dist/fonts'));
 });
 
 gulp.task('clean', function(cb){
@@ -154,7 +159,7 @@ gulp.task('watch', function () {
     gulp.watch(['./src/**/*.css', './src/**/*.scss'], ['css']);
 });
 
-gulp.task('dist', ['main-template','ts', 'css', 'image', 'html', 'font']);
+gulp.task('dist', ['main-template', 'js', 'ts', 'css', 'image', 'html', 'font']);
 gulp.task('clean-for-release', function(cb){
   del(['./dist/maps'], cb);
 });
