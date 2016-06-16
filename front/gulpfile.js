@@ -26,6 +26,33 @@ var sass = require('gulp-sass');
 var templateCache = require('gulp-angular-templatecache');
 var flatten = require('gulp-flatten');
 
+var bowerWebpackPlugin = new BowerWebpackPlugin({
+  modulesDirectories: ["bower_components"],
+  manifestFiles:      [".bower.json","bower.json"],
+  includes:           /.*/,
+  excludes:           [],
+  searchResolveModulesDirectories: false
+});
+
+var uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin();
+var tsWebpackModule = {
+  loaders: [
+    {
+      test: /\.ts$/,
+      loader: "awesome-typescript-loader"
+    },
+    {
+      test: /\.css$/,
+      loaders: ['style', 'css']
+    },
+  ]
+}
+var tsWebpackOutput = {
+  filename: 'js/[name]-app.js',
+  devtoolModuleFilenameTemplate: '../../[resource-path]',
+  devtoolFallbackModuleFilenameTemplate: '../../[resource-path]?[hash]',
+}
+
 gulp.task('bower', function() {
   return bower({
     command: 'install'
@@ -42,44 +69,44 @@ gulp.task('tsd', function (callback) {
 
 // TypeScript Task
 gulp.task('ts_main', ['tsd', 'bower'], function () {
-  return gulp.src(['./src/**/*'])
+  return gulp.src(['./src/ts/common/**/*', './src/ts/main/**/*'])
+    .pipe(webpackStream({
+      displayErrorDetails: true,
+      devtool: '#source-map',
+      resolve: {
+        extensions: ['', '.ts', '.webpack.js', '.web.js', '.js', '.css']
+       },
+      entry: {main: './src/ts/main/app.ts'},
+      output: tsWebpackOutput,
+      plugins: [bowerWebpackPlugin,
+        // uglifyJsPlugin
+      ],
+      module: tsWebpackModule,
+    }))
+    // .pipe(sourcemaps())
+    .pipe(gulp.dest('dist/'));
+});
+
+gulp.task('ts_sitemap', ['tsd', 'bower'], function () {
+  return gulp.src(['./src/ts/common/**/*', './src/ts/sitemap/**/*'])
     .pipe(webpackStream({
       displayErrorDetails: true,
       devtool: 'source-map',
       resolve: {
         extensions: ['', '.ts', '.webpack.js', '.web.js', '.js', '.css']
        },
-      entry: {main: './src/ts/main/app.ts'},
-      output: {
-        filename: 'js/[name]-app.js'
-      },
-      plugins: [
-        new BowerWebpackPlugin({
-          modulesDirectories: ["bower_components"],
-          manifestFiles:      [".bower.json","bower.json"],
-          includes:           /.*/,
-          excludes:           [],
-          searchResolveModulesDirectories: false
-        }),
-        // new webpack.optimize.UglifyJsPlugin()
+      entry: {sitemap: './src/ts/sitemap/app.ts'},
+      output: tsWebpackOutput,
+      plugins: [bowerWebpackPlugin,
+        // uglifyJsPlugin
       ],
-      module: {
-        loaders: [
-          {
-            test: /\.ts$/,
-            loader: "awesome-typescript-loader"
-          },
-          {
-            test: /\.css$/,
-            loaders: ['style', 'css']
-          },
-        ]
-      },
+      module: tsWebpackModule,
     }))
     .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('ts', ['ts_main']);
+
+gulp.task('ts', ['ts_main', 'ts_sitemap']);
 
 gulp.task('main-template', function(){
   return gulp.src('./src/views/**/*.html')
@@ -92,7 +119,7 @@ gulp.task('main-template', function(){
 });
 
 gulp.task('html', function(){
-  return gulp.src(['./src/index.html'])
+  return gulp.src(['./src/html/**/*.html'], {base:'./src/html'})
     .pipe(htmlmin({
       removeComments: true,
       removeCommentsFromCDATA: true,
@@ -105,7 +132,7 @@ gulp.task('html', function(){
 });
 
 gulp.task('image', function(){
-  var result = gulp.src(['./src/**/*.{png,jpg,gif}', '!./src/commons/**/demo/**'])
+  var result = gulp.src(['./src/**/*.{png,jpg,gif}'])
   .pipe(imagemin())
   .pipe(gulp.dest('./dist'));
   return result;
@@ -152,16 +179,17 @@ gulp.task('connect', function(){
 
 // Watch
 gulp.task('watch', function () {
-    gulp.watch(['./src/ts/**/*.ts'], ['ts']);
-    gulp.watch(['./src/index.html', './src/views/**/*.html'], ['html']);
+    gulp.watch(['./src/ts/common/**/*', './src/ts/main/**/*'], ['ts_main']);
+    gulp.watch(['./src/ts/common/**/*', './src/ts/sitemap/**/*'], ['ts_sitemap']);
+    gulp.watch(['./src/html/**/*.html'], ['html']);
     gulp.watch(['./src/views/**/*.html'], ['main-template']);
     gulp.watch(['./src/**/*.{png,jpg,gif}'], ['image']);
-    gulp.watch(['./src/**/*.css', './src/**/*.scss'], ['css']);
+    gulp.watch(['./src/**/*.scss'], ['css']);
 });
 
 gulp.task('dist', ['main-template', 'js', 'ts', 'css', 'image', 'html', 'font']);
 gulp.task('clean-for-release', function(cb){
-  del(['./dist/maps'], cb);
+  del(['./dist/**/*.map'], cb);
 });
 gulp.task('release', function(cb) {
   runSequence('dist', 'clean-for-release', cb);
