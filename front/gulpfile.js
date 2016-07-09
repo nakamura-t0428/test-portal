@@ -109,7 +109,17 @@ gulp.task('ts_sitemap', ['tsd', 'bower'], function () {
 gulp.task('ts', ['ts_main', 'ts_sitemap']);
 
 gulp.task('main-template', function(){
-  return gulp.src('./src/views/**/*.html')
+  return gulp.src(['./src/views/common/**/*.html','./src/views/main/**/*.html'])
+    .pipe(templateCache('main-template.js', {
+      root: '',
+      module: 'main.app',
+      standalone: false,
+    }))
+    .pipe(gulp.dest('./dist/js'));
+});
+
+gulp.task('sitemap-template', function(){
+  return gulp.src(['./src/views/common/**/*.html','./src/views/sitemap/**/*.html'])
     .pipe(templateCache('main-template.js', {
       root: '',
       module: 'main.app',
