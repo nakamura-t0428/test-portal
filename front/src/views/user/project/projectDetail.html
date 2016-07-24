@@ -1,5 +1,5 @@
 <div ng-controller="projectController as prjCtrl">
-  <h1>
+  <h2>
     {{prjCtrl.project.prjInfo.name}}
     <div class="btn-group pull-right" uib-dropdown>
       <button type="button" id="prj-menu-dropdown" uib-dropdown-toggle class="btn btn-default"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
@@ -9,6 +9,9 @@
         </li>
       </ul>
     </div>
-  </h1>
-  <pre>{{prjCtrl.project | json}}</pre>
+  </h2>
+  <uib-tabset active="active">
+    <uib-tab heading="概要"><pre>{{prjCtrl.project | json}}</pre></uib-tab>
+    <uib-tab heading="サイトマップ"></uib-tab>
+  </uib-tabset>
 </div>
