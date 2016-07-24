@@ -69,14 +69,14 @@ gulp.task('tsd', function (callback) {
 
 // TypeScript Task
 gulp.task('ts_main', ['tsd', 'bower'], function () {
-  return gulp.src(['./src/ts/common/**/*', './src/ts/main/**/*'])
+  return gulp.src(['./src/ts/**/*'])
     .pipe(webpackStream({
       displayErrorDetails: true,
       devtool: '#source-map',
       resolve: {
         extensions: ['', '.ts', '.webpack.js', '.web.js', '.js', '.css']
        },
-      entry: {main: './src/ts/main/app.ts'},
+      entry: {main: './src/ts/app.ts'},
       output: tsWebpackOutput,
       plugins: [bowerWebpackPlugin,
         // uglifyJsPlugin
@@ -87,39 +87,10 @@ gulp.task('ts_main', ['tsd', 'bower'], function () {
     .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('ts_sitemap', ['tsd', 'bower'], function () {
-  return gulp.src(['./src/ts/common/**/*', './src/ts/sitemap/**/*'])
-    .pipe(webpackStream({
-      displayErrorDetails: true,
-      devtool: 'source-map',
-      resolve: {
-        extensions: ['', '.ts', '.webpack.js', '.web.js', '.js', '.css']
-       },
-      entry: {sitemap: './src/ts/sitemap/app.ts'},
-      output: tsWebpackOutput,
-      plugins: [bowerWebpackPlugin,
-        // uglifyJsPlugin
-      ],
-      module: tsWebpackModule,
-    }))
-    .pipe(gulp.dest('dist/'));
-});
-
-
-gulp.task('ts', ['ts_main', 'ts_sitemap']);
+gulp.task('ts', ['ts_main']);
 
 gulp.task('main-template', function(){
-  return gulp.src(['./src/views/common/**/*.html','./src/views/main/**/*.html'])
-    .pipe(templateCache('main-template.js', {
-      root: '',
-      module: 'main.app',
-      standalone: false,
-    }))
-    .pipe(gulp.dest('./dist/js'));
-});
-
-gulp.task('sitemap-template', function(){
-  return gulp.src(['./src/views/common/**/*.html','./src/views/sitemap/**/*.html'])
+  return gulp.src(['./src/views/**/*.html'])
     .pipe(templateCache('main-template.js', {
       root: '',
       module: 'main.app',
