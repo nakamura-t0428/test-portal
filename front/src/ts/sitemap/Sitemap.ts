@@ -21,7 +21,7 @@ export class Sitemap {
   ) {
     $urlRouterProvider.otherwise('/guest/top')
     $stateProvider
-    .state('guest', {
+    .state('guest', { //ゲスト画面のベース
       abstract: true,
       url: '/guest',
       templateUrl: 'guest/base.html',
@@ -29,22 +29,22 @@ export class Sitemap {
       controllerAs: 'guestCtrl'
     })
     $stateProvider
-    .state('guest.top', {
+    .state('guest.top', { //ゲスト画面トップ（ログイン）
       url: '/top',
       templateUrl: 'guest/top.html',
     })
     $stateProvider
-    .state('guest.invite', {
+    .state('guest.invite', { //ゲスト画面 登録申請
       url: '/invite',
       templateUrl: 'guest/invite.html',
     })
     $stateProvider
-    .state('guest.signup', {
+    .state('guest.signup', { //ゲスト画面 本登録
       url: '/signup/:token',
       templateUrl: 'guest/signup.html',
     })
     $stateProvider
-    .state('user', {
+    .state('user', { //ユーザ 基礎
       abstract: true,
       url: '/user',
       templateUrl: 'user/base.html',
@@ -54,7 +54,7 @@ export class Sitemap {
       controllerAs: 'userCtrl'
     })
     $stateProvider
-    .state('user.top', {
+    .state('user.top', { // ユーザ トップ
       url: '/top',
       views: {
         'left-menu': {
@@ -66,9 +66,14 @@ export class Sitemap {
       },
     })
     $stateProvider
-    .state('user.top.project', {
+    .state('user.top.project', { // ユーザ プロジェクト
       url: '/project/:prjId',
       templateUrl: 'user/project/projectDetail.html',
+    })
+    $stateProvider
+    .state('user.top.project.sitemap', { // ユーザ プロジェクト
+      url: '/sitemap',
+      templateUrl: 'user/project/projectSitemap.html',
     })
   }
 }

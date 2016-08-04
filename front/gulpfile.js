@@ -160,8 +160,7 @@ gulp.task('connect', function(){
 
 // Watch
 gulp.task('watch', function () {
-    gulp.watch(['./src/ts/common/**/*', './src/ts/main/**/*'], ['ts_main']);
-    gulp.watch(['./src/ts/common/**/*', './src/ts/sitemap/**/*'], ['ts_sitemap']);
+    gulp.watch(['./src/ts/**/*'], ['ts']);
     gulp.watch(['./src/html/**/*.html'], ['html']);
     gulp.watch(['./src/views/**/*.html'], ['main-template']);
     gulp.watch(['./src/**/*.{png,jpg,gif}'], ['image']);

@@ -84,6 +84,10 @@ app.controller('projectController', ['projectDataResource', '$state', '$statePar
 //   ($state:IStateService, myInfo: IMyInfoResp, isLogin:boolean) =>
 //     new GuestController($state, myInfo, isLogin)]);
 
+////////////////////////////////////////////////////////// Directive
+import {SitemapDirective} from './directive/SitemapDirective';
+app.directive('prjSitemap', [() => new SitemapDirective()]);
+
 ////////////////////////////////////////////////////////// Config    
 import {Sitemap} from './sitemap/Sitemap';
 app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider',

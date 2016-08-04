@@ -24,6 +24,19 @@ export class ProjectController {
     private $scope:ProjectControllerScope) {
       projectResource.get({'prjId':$stateParams['prjId']}, (resp:IProjectDetail)=>{
         this.project = resp;
+        $scope['userCtrl'].topMenu = [
+          {
+            label: 'サイトマップ',
+            desc: '',
+            state: 'user.top.project.sitemap'
+          }
+        ]
+        $scope['userCtrl'].loc = {
+          label: this.project.prjInfo.name,
+          state: 'user.top.project',
+          desc: '',
+          stateParams: {prjId: this.project.prjInfo.prjId}
+        };
       })
   }
 

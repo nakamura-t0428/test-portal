@@ -5,11 +5,19 @@ import IStorageService = angular.storage.IStorageService;
 
 import {MyInfoResource} from '../resource/MyInfoResource';
 import {IMyInfoResp} from '../model/IMyInfoResp';
+import {ITopMenu} from '../model/ITopMenu';
 
 const GUEST_TOP_ST = 'guest.top';
 
 export class UserController {
   public myInfo:IMyInfoResp;
+  public loc:ITopMenu = {
+    label: 'ダッシュボード',
+    state: 'user.top',
+    desc: ''
+  }
+
+  public topMenu:Array<ITopMenu> = [];
   
   constructor(
     private $state:IStateService,
