@@ -29,6 +29,11 @@ export class ProjectController {
             label: 'サイトマップ',
             desc: '',
             state: 'user.top.project.sitemap'
+          },
+          {
+            label: 'メンバー',
+            desc: '',
+            state: 'user.top.project.member'
           }
         ]
         $scope['userCtrl'].loc = {

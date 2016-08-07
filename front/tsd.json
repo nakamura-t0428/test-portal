@@ -28,6 +28,9 @@
     },
     "angular-ui-bootstrap/angular-ui-bootstrap.d.ts": {
       "commit": "bc38caf4c4781b8a9b13785a0529fcd47fd1bfb4"
+    },
+    "ui-grid/ui-grid.d.ts": {
+      "commit": "bc38caf4c4781b8a9b13785a0529fcd47fd1bfb4"
     }
   }
 }

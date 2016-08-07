@@ -1,12 +1,5 @@
 /// <reference path="../../typings/tsd.d.ts"/>
 
-import "angular";
-import "angular-resource";
-import "angular-animate";
-import "ngstorage";
-import "angular-bootstrap";
-import "angular-ui-router";
-import "angular-loading-bar";
 import IStateProvider = ng.ui.IStateProvider;
 import IStateService = angular.ui.IStateService;
 import IStateParamsService = angular.ui.IStateParamsService;
@@ -19,7 +12,7 @@ import IModalServiceInstance = ng.ui.bootstrap.IModalServiceInstance;
 
 ////////////////////////////////////////////////// TypeScript
 
-let app = angular.module('main.app', ['ngResource', 'ngStorage', 'ngAnimate', 'ui.bootstrap', 'ui.router', 'angular-loading-bar']);
+let app = angular.module('main.app', ['ngResource', 'ngStorage', 'ngAnimate', 'ui.bootstrap', 'ui.router', 'angular-loading-bar', 'ui.grid']);
 
 //////////////////////////////////////////////////////// Config
 import {ConfigService} from "./service/ConfigService";

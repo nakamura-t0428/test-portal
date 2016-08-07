@@ -121,9 +121,20 @@ gulp.task('image', function(){
 
 gulp.task('js', function(){
   return gulp.src(
-    ['./bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js',
-    './bower_components/jquery/dist/jquery.min.js'])
-    .pipe(flatten())
+    [
+      './bower_components/jquery/dist/jquery.min.js',
+      './bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js',
+      './bower_components/angular/angular.min.js',
+      './bower_components/angular-resource/angular-resource.min.js',
+      './bower_components/angular-animate/angular-animate.min.js',
+      './bower_components/angular-bootstrap/ui-bootstrap.min.js',
+      './bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+      './bower_components/angular-ui-router/release/angular-ui-router.min.js',
+      './bower_components/angular-loading-bar/build/loading-bar.min.js',
+      './bower_components/angular-ui-grid/ui-grid.min.js',
+      './bower_components/ngstorage/ngStorage.min.js',
+      ])
+    .pipe(concat('common-components.js'))
     .pipe(gulp.dest('./dist/js'));
 });
 
@@ -142,7 +153,10 @@ gulp.task('css', function(){
 
 gulp.task('font', ['bower'], function(){
   return gulp.src(
-    ['./bower_components/bootstrap-sass/assets/fonts/bootstrap/*.{eot,woff2,woff,ttf,svg}'])
+    [
+      './bower_components/bootstrap-sass/assets/fonts/bootstrap/*.{eot,woff2,woff,ttf,svg}',
+      './bower_components/angular-ui-grid/*.{eot,woff2,woff,ttf,svg}',
+      ])
     .pipe(flatten())
     .pipe(gulp.dest('./dist/fonts'));
 });
@@ -160,11 +174,11 @@ gulp.task('connect', function(){
 
 // Watch
 gulp.task('watch', function () {
-    gulp.watch(['./src/ts/**/*'], ['ts']);
-    gulp.watch(['./src/html/**/*.html'], ['html']);
-    gulp.watch(['./src/views/**/*.html'], ['main-template']);
-    gulp.watch(['./src/**/*.{png,jpg,gif}'], ['image']);
-    gulp.watch(['./src/**/*.scss'], ['css']);
+    gulp.watch(['src/ts/**/*'], ['ts']);
+    gulp.watch(['src/html/**/*.html'], ['html']);
+    gulp.watch(['src/views/**/*.html'], ['main-template']);
+    gulp.watch(['src/**/*.{png,jpg,gif}'], ['image']);
+    gulp.watch(['src/**/*.scss'], ['css']);
 });
 
 gulp.task('dist', ['main-template', 'js', 'ts', 'css', 'image', 'html', 'font']);

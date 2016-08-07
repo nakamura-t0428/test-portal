@@ -75,5 +75,10 @@ export class Sitemap {
       url: '/sitemap',
       templateUrl: 'user/project/projectSitemap.html',
     })
+    $stateProvider
+    .state('user.top.project.member', { // ユーザ プロジェクト
+      url: '/member',
+      templateUrl: 'user/project/projectMember.html',
+    })
   }
 }
